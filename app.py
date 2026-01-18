@@ -133,14 +133,14 @@ st.markdown("""
     
     .stat-box h2 {
         font-family: 'VT323', monospace;
-        font-size: 1.8rem;
+        font-size: 2.2rem;
         margin: 0;
         color: #000080;
     }
     
     .stat-box p {
         font-family: 'VT323', monospace;
-        font-size: 0.85rem;
+        font-size: 1.1rem;
         margin: 5px 0 0 0;
         color: #000000;
     }
@@ -148,7 +148,8 @@ st.markdown("""
     .stat-box small {
         font-family: 'VT323', monospace;
         margin-top: 5px;
-        font-size: 0.65rem;
+        font-size: 0.8rem;
+        color: #000000;
     }
     
     @media (min-width: 768px) {
@@ -158,15 +159,15 @@ st.markdown("""
         }
         
         .stat-box h2 {
-            font-size: 2.5rem;
+            font-size: 2.8rem;
         }
         
         .stat-box p {
-            font-size: 1rem;
+            font-size: 1.2rem;
         }
         
         .stat-box small {
-            font-size: 0.7rem;
+            font-size: 0.85rem;
         }
     }
     
@@ -174,12 +175,15 @@ st.markdown("""
         background-color: #00ff00;
     }
     
-    .stat-box.lose {
-        background-color: #ff0000;
-        color: #ffffff;
+    .stat-box.win h2, .stat-box.win p, .stat-box.win small {
+        color: #003300;
     }
     
-    .stat-box.lose h2, .stat-box.lose p {
+    .stat-box.lose {
+        background-color: #ff0000;
+    }
+    
+    .stat-box.lose h2, .stat-box.lose p, .stat-box.lose small {
         color: #ffffff;
     }
     
@@ -292,6 +296,7 @@ st.markdown("""
         margin-bottom: 10px;
         font-family: 'VT323', monospace;
         font-size: 1rem;
+        color: #000000;
     }
     
     @media (min-width: 768px) {
@@ -303,6 +308,10 @@ st.markdown("""
     
     .lock-entry strong {
         color: #000080;
+    }
+    
+    .lock-entry span {
+        color: #000000;
     }
     
     /* Sidebar retro styling - Hidden on mobile by default */
@@ -326,6 +335,11 @@ st.markdown("""
         font-family: 'VT323', monospace;
         font-size: 1rem;
         margin: 8px 0;
+        color: #000000;
+    }
+    
+    .info-box b, .info-box strong {
+        color: #000000;
     }
     
     @media (min-width: 768px) {
@@ -468,80 +482,6 @@ def convert_to_units(amount):
     }
 
 # ============================================================================
-# SIDEBAR
-# ============================================================================
-
-with st.sidebar:
-    st.markdown("""
-    <div style="text-align: center; padding: 10px; background-color: #000080; color: #ffff00; font-family: 'Press Start 2P', cursive; font-size: 0.5rem; border: 2px outset #ffffff;">
-    💰 DEGENERATE<br>UNIT<br>CONVERSIONS 💰
-    </div>
-    """, unsafe_allow_html=True)
-    
-    st.markdown("<br>", unsafe_allow_html=True)
-    
-    st.markdown("""
-    <div style="font-family: 'VT323', monospace; font-size: 1rem; margin-bottom: 5px;">
-    How much did you win/lose from your G Lock?
-    </div>
-    """, unsafe_allow_html=True)
-    
-    amount = st.number_input("Amount ($)", min_value=0.0, value=100.0, step=10.0, label_visibility="collapsed")
-    
-    if amount > 0:
-        conversions = convert_to_units(amount)
-        
-        st.markdown(f"""
-        <div class="info-box">
-            <center>
-            <b>🏌️ ProV1s</b><br>
-            <span style="font-size: 1.5rem; color: green;">{conversions['prov1_balls']:.1f}</span><br>
-            <small>@ $4.75 each</small>
-            </center>
-        </div>
-        """, unsafe_allow_html=True)
-        
-        st.markdown(f"""
-        <div class="info-box">
-            <center>
-            <b>🍺 Labatt Blues</b><br>
-            <span style="font-size: 1.5rem; color: blue;">{conversions['labatt_blues']:.1f}</span><br>
-            <small>@ $0.95 each</small>
-            </center>
-        </div>
-        """, unsafe_allow_html=True)
-        
-        st.markdown(f"""
-        <div class="info-box">
-            <center>
-            <b>🫧 Zyn Cans</b><br>
-            <span style="font-size: 1.5rem; color: purple;">{conversions['zyn_cans']:.1f}</span><br>
-            <small>@ $5 each</small>
-            </center>
-        </div>
-        """, unsafe_allow_html=True)
-        
-        st.markdown(f"""
-        <div class="info-box">
-            <center>
-            <b>🏌️ Scotty Camerons</b><br>
-            <span style="font-size: 1.5rem; color: darkgreen;">{conversions['scotty_camerons']:.2f}</span><br>
-            <small>@ $450 each</small>
-            </center>
-        </div>
-        """, unsafe_allow_html=True)
-        
-        st.markdown(f"""
-        <div class="info-box">
-            <center>
-            <b>💃 Philly's Lap Dances</b><br>
-            <span style="font-size: 1.5rem; color: hotpink;">{conversions['philly_lap_dances']:.1f}</span><br>
-            <small>@ $25 each</small>
-            </center>
-        </div>
-        """, unsafe_allow_html=True)
-
-# ============================================================================
 # MAIN CONTENT
 # ============================================================================
 
@@ -607,7 +547,7 @@ with col4:
     <div class="stat-box {fade_class}">
         <h2>${fade_index:+.2f}</h2>
         <p>FADE INDEX</p>
-        <small style="font-size: 0.7rem;">How much you'd pocket if you faded every G Lock ($10/bet)</small>
+        <small>How much you'd pocket if you faded every G Lock ($10/bet)</small>
     </div>
     """, unsafe_allow_html=True)
 
@@ -617,7 +557,7 @@ st.markdown('<div class="red-divider"></div>', unsafe_allow_html=True)
 # TABS
 # ============================================================================
 
-tab1, tab2, tab3 = st.tabs(["📋 ACTIVE LOCKS", "🏛️ THE VAULT", "🔐 GLOCK ENTRY"])
+tab1, tab2, tab3, tab4 = st.tabs(["📋 ACTIVE", "🏛️ VAULT", "🔐 ENTRY", "💰 CONVERTER"])
 
 # ----------------------------------------------------------------------------
 # TAB 1: ACTIVE LOCKS
@@ -647,7 +587,7 @@ with tab1:
                 <strong>🎯 PICK:</strong> {lock['pick']}<br>
                 <strong>📊 TYPE:</strong> {lock['bet_type']}<br>
                 <strong>💪 CONFIDENCE:</strong> {lock['confidence']}<br>
-                <strong>⏳ STATUS:</strong> <span style="color: orange; font-weight: bold;">PENDING...</span>
+                <strong>⏳ STATUS:</strong> <span style="color: #cc6600; font-weight: bold;">PENDING...</span>
             </div>
             """, unsafe_allow_html=True)
 
@@ -676,17 +616,20 @@ with tab2:
         
         for _, lock in settled_locks.iterrows():
             if lock['result'] == 'Win':
-                result_color = "#00ff00"
+                result_color = "#006600"
+                border_color = "#00cc00"
                 result_text = "✅ WIN ✅"
             elif lock['result'] == 'Loss':
-                result_color = "#ff0000"
+                result_color = "#cc0000"
+                border_color = "#ff0000"
                 result_text = "❌ LOSS ❌"
             else:
-                result_color = "#ffff00"
+                result_color = "#cc9900"
+                border_color = "#ffcc00"
                 result_text = "🤷 PUSH 🤷"
             
             st.markdown(f"""
-            <div class="lock-entry" style="border-left: 5px solid {result_color};">
+            <div class="lock-entry" style="border-left: 5px solid {border_color};">
                 <strong>🏈 GAME:</strong> {lock['game']}<br>
                 <strong>🎯 PICK:</strong> {lock['pick']}<br>
                 <strong>📊 TYPE:</strong> {lock['bet_type']}<br>
@@ -823,6 +766,79 @@ with tab3:
         if st.button("🔒 LOCK SCREEN"):
             st.session_state['glock_authenticated'] = False
             st.rerun()
+
+# ----------------------------------------------------------------------------
+# TAB 4: DEGENERATE CONVERTER
+# ----------------------------------------------------------------------------
+
+with tab4:
+    st.markdown('<div class="section-header">💰 DEGENERATE UNIT CONVERSIONS</div>', unsafe_allow_html=True)
+    
+    st.markdown("""
+    <div style="font-family: 'VT323', monospace; font-size: 1.2rem; margin: 15px 0; color: #000000;">
+    How much did you win/lose from your G Lock?
+    </div>
+    """, unsafe_allow_html=True)
+    
+    amount = st.number_input("Amount ($)", min_value=0.0, value=100.0, step=10.0, label_visibility="collapsed")
+    
+    if amount > 0:
+        conversions = convert_to_units(amount)
+        
+        # Display conversions in a 2-column grid on mobile
+        conv_col1, conv_col2 = st.columns(2)
+        
+        with conv_col1:
+            st.markdown(f"""
+            <div class="info-box">
+                <center>
+                <b>🏌️ ProV1s</b><br>
+                <span style="font-size: 1.8rem; color: #006600;">{conversions['prov1_balls']:.1f}</span><br>
+                <small style="color: #000000;">@ $4.75 each</small>
+                </center>
+            </div>
+            """, unsafe_allow_html=True)
+            
+            st.markdown(f"""
+            <div class="info-box">
+                <center>
+                <b>🫧 Zyn Cans</b><br>
+                <span style="font-size: 1.8rem; color: #660066;">{conversions['zyn_cans']:.1f}</span><br>
+                <small style="color: #000000;">@ $5 each</small>
+                </center>
+            </div>
+            """, unsafe_allow_html=True)
+            
+            st.markdown(f"""
+            <div class="info-box">
+                <center>
+                <b>💃 Philly's Lap Dances</b><br>
+                <span style="font-size: 1.8rem; color: #cc0066;">{conversions['philly_lap_dances']:.1f}</span><br>
+                <small style="color: #000000;">@ $25 each</small>
+                </center>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        with conv_col2:
+            st.markdown(f"""
+            <div class="info-box">
+                <center>
+                <b>🍺 Labatt Blues</b><br>
+                <span style="font-size: 1.8rem; color: #000066;">{conversions['labatt_blues']:.1f}</span><br>
+                <small style="color: #000000;">@ $0.95 each</small>
+                </center>
+            </div>
+            """, unsafe_allow_html=True)
+            
+            st.markdown(f"""
+            <div class="info-box">
+                <center>
+                <b>🏌️ Scotty Camerons</b><br>
+                <span style="font-size: 1.8rem; color: #004400;">{conversions['scotty_camerons']:.2f}</span><br>
+                <small style="color: #000000;">@ $450 each</small>
+                </center>
+            </div>
+            """, unsafe_allow_html=True)
 
 # ============================================================================
 # FOOTER
