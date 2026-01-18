@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 LockHub - Garrett's Lock Tracker
 A Streamlit app with that sweet 90s internet aesthetic.
@@ -22,6 +23,8 @@ st.set_page_config(
 # ============================================================================
 # 90s RETRO CSS
 # ============================================================================
+
+st.markdown('<meta charset="UTF-8">', unsafe_allow_html=True)
 
 st.markdown("""
 <style>
