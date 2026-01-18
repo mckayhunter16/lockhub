@@ -13,8 +13,8 @@ from datetime import datetime
 # ============================================================================
 
 st.set_page_config(
-    page_title="🔒 LockHub 🔒",
-    page_icon="🔒",
+    page_title="ðŸ”’ LockHub ðŸ”’",
+    page_icon="ðŸ”’",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -394,7 +394,6 @@ PROV1_PRICE = 4.75
 LABATT_BLUE_PRICE = 0.95
 ZYN_CAN_PRICE = 5.00
 SCOTTY_CAMERON_PRICE = 450.00
-PHILLY_LAP_DANCE_PRICE = 25.00
 
 GLOCK_PASSWORD = "glock"
 
@@ -477,28 +476,31 @@ def convert_to_units(amount):
         'prov1_balls': amount / PROV1_PRICE,
         'labatt_blues': amount / LABATT_BLUE_PRICE,
         'zyn_cans': amount / ZYN_CAN_PRICE,
-        'scotty_camerons': amount / SCOTTY_CAMERON_PRICE,
-        'philly_lap_dances': amount / PHILLY_LAP_DANCE_PRICE
+        'scotty_camerons': amount / SCOTTY_CAMERON_PRICE
     }
 
 # ============================================================================
 # MAIN CONTENT
 # ============================================================================
 
-# Header
-st.markdown('<div class="retro-header">🔒 LOCKHUB 🔒</div>', unsafe_allow_html=True)
+# Header - clickable to reload
+st.markdown('''
+<a href="/" style="text-decoration: none;">
+    <div class="retro-header">ðŸ”’ LOCKHUB ðŸ”’</div>
+</a>
+''', unsafe_allow_html=True)
 
 # Marquee
 st.markdown("""
 <div class="marquee">
-    <span>★ The official home of G Locks. Past performance does not guarantee future results. Good luck, degenerate! ★</span>
+    <span>â˜… The official home of G Locks. Past performance does not guarantee future results. Good luck, degenerate! â˜… The official home of G Locks. Past performance does not guarantee future results. Good luck, degenerate! â˜… The official home of G Locks. Past performance does not guarantee future results. Good luck, degenerate! â˜…</span>
 </div>
 """, unsafe_allow_html=True)
 
 conn = get_gsheet_connection()
 
 if conn is None:
-    st.error("⚠️ DATABASE CONNECTION ERROR - Please refresh page")
+    st.error("âš ï¸ DATABASE CONNECTION ERROR - Please refresh page")
     st.stop()
 
 df = load_locks_data(conn)
@@ -508,7 +510,8 @@ st.markdown('<div class="red-divider"></div>', unsafe_allow_html=True)
 
 col1, col2, col3, col4 = st.columns(4)
 
-total_locks = len(df)
+pending_locks = len(df[df['status'] == 'Active'])
+settled_locks = len(df[df['result'].isin(['Win', 'Loss', 'Push'])])
 wins = len(df[df['result'] == 'Win'])
 losses = len(df[df['result'] == 'Loss'])
 pushes = len(df[df['result'] == 'Push'])
@@ -519,8 +522,10 @@ fade_index = calculate_fade_index(df)
 with col1:
     st.markdown(f"""
     <div class="stat-box">
-        <h2>{total_locks}</h2>
-        <p>TOTAL LOCKS</p>
+        <h2>{pending_locks}</h2>
+        <p>PENDING</p>
+        <h2>{settled_locks}</h2>
+        <p>SETTLED</p>
     </div>
     """, unsafe_allow_html=True)
 
@@ -536,7 +541,7 @@ with col2:
 with col3:
     st.markdown(f"""
     <div class="stat-box">
-        <h2>{streak} 🔥</h2>
+        <h2>{streak}</h2>
         <p>WIN STREAK</p>
     </div>
     """, unsafe_allow_html=True)
@@ -557,14 +562,14 @@ st.markdown('<div class="red-divider"></div>', unsafe_allow_html=True)
 # TABS
 # ============================================================================
 
-tab1, tab2, tab3, tab4 = st.tabs(["📋 ACTIVE", "🏛️ VAULT", "🔐 ENTRY", "💰 CONVERTER"])
+tab1, tab2, tab3, tab4 = st.tabs(["ðŸ“‹ ACTIVE", "ðŸ›ï¸ VAULT", "ðŸ” ENTRY", "ðŸ’° CONVERTER"])
 
 # ----------------------------------------------------------------------------
 # TAB 1: ACTIVE LOCKS
 # ----------------------------------------------------------------------------
 
 with tab1:
-    st.markdown('<div class="section-header">📋 ACTIVE LOCKS</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-header">ðŸ“‹ ACTIVE LOCKS</div>', unsafe_allow_html=True)
     
     active_locks = df[df['status'] == 'Active']
     
@@ -573,7 +578,7 @@ with tab1:
         <div class="info-box">
             <center>
             <br>
-            😴 No active locks right now... 😴<br>
+            ðŸ˜´ No active locks right now... ðŸ˜´<br>
             <small>Garrett must be conserving his energy</small>
             <br><br>
             </center>
@@ -583,11 +588,11 @@ with tab1:
         for _, lock in active_locks.iterrows():
             st.markdown(f"""
             <div class="lock-entry">
-                <strong>🏈 GAME:</strong> {lock['game']}<br>
-                <strong>🎯 PICK:</strong> {lock['pick']}<br>
-                <strong>📊 TYPE:</strong> {lock['bet_type']}<br>
-                <strong>💪 CONFIDENCE:</strong> {lock['confidence']}<br>
-                <strong>⏳ STATUS:</strong> <span style="color: #cc6600; font-weight: bold;">PENDING...</span>
+                <strong>ðŸˆ GAME:</strong> {lock['game']}<br>
+                <strong>ðŸŽ¯ PICK:</strong> {lock['pick']}<br>
+                <strong>ðŸ“Š TYPE:</strong> {lock['bet_type']}<br>
+                <strong>ðŸ’ª CONFIDENCE:</strong> {lock['confidence']}<br>
+                <strong>â³ STATUS:</strong> <span style="color: #cc6600; font-weight: bold;">PENDING...</span>
             </div>
             """, unsafe_allow_html=True)
 
@@ -596,7 +601,7 @@ with tab1:
 # ----------------------------------------------------------------------------
 
 with tab2:
-    st.markdown('<div class="section-header">🏛️ THE VAULT - Historical Records</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-header">ðŸ›ï¸ THE VAULT - Historical Records</div>', unsafe_allow_html=True)
     
     settled_locks = df[df['result'].isin(['Win', 'Loss', 'Push'])]
     
@@ -605,7 +610,7 @@ with tab2:
         <div class="info-box">
             <center>
             <br>
-            📭 The Vault is empty! 📭<br>
+            ðŸ“­ The Vault is empty! ðŸ“­<br>
             <small>No locks have been settled yet</small>
             <br><br>
             </center>
@@ -618,28 +623,28 @@ with tab2:
             if lock['result'] == 'Win':
                 result_color = "#006600"
                 border_color = "#00cc00"
-                result_text = "✅ WIN ✅"
+                result_text = "âœ… WIN âœ…"
             elif lock['result'] == 'Loss':
                 result_color = "#cc0000"
                 border_color = "#ff0000"
-                result_text = "❌ LOSS ❌"
+                result_text = "âŒ LOSS âŒ"
             else:
                 result_color = "#cc9900"
                 border_color = "#ffcc00"
-                result_text = "🤷 PUSH 🤷"
+                result_text = "ðŸ¤· PUSH ðŸ¤·"
             
             st.markdown(f"""
             <div class="lock-entry" style="border-left: 5px solid {border_color};">
-                <strong>🏈 GAME:</strong> {lock['game']}<br>
-                <strong>🎯 PICK:</strong> {lock['pick']}<br>
-                <strong>📊 TYPE:</strong> {lock['bet_type']}<br>
-                <strong>💪 CONFIDENCE:</strong> {lock['confidence']}<br>
-                <strong>🏆 RESULT:</strong> <span style="color: {result_color}; font-weight: bold;">{result_text}</span>
+                <strong>ðŸˆ GAME:</strong> {lock['game']}<br>
+                <strong>ðŸŽ¯ PICK:</strong> {lock['pick']}<br>
+                <strong>ðŸ“Š TYPE:</strong> {lock['bet_type']}<br>
+                <strong>ðŸ’ª CONFIDENCE:</strong> {lock['confidence']}<br>
+                <strong>ðŸ† RESULT:</strong> <span style="color: {result_color}; font-weight: bold;">{result_text}</span>
             </div>
             """, unsafe_allow_html=True)
         
         # Stats by confidence
-        st.markdown('<div class="section-header">📊 PERFORMANCE BY CONFIDENCE</div>', unsafe_allow_html=True)
+        st.markdown('<div class="section-header">ðŸ“Š PERFORMANCE BY CONFIDENCE</div>', unsafe_allow_html=True)
         
         for level in CONFIDENCE_LEVELS:
             level_locks = settled_locks[settled_locks['confidence'] == level]
@@ -649,7 +654,7 @@ with tab2:
                 level_total = level_wins + level_losses
                 level_pct = (level_wins / level_total * 100) if level_total > 0 else 0
                 
-                emoji = "🤷" if level == "Fuck It, I'm Bored" else ("😎" if level == "Feeling Good" else "💰")
+                emoji = "ðŸ¤·" if level == "Fuck It, I'm Bored" else ("ðŸ˜Ž" if level == "Feeling Good" else "ðŸ’°")
                 st.markdown(f"""
                 <div class="info-box">
                     {emoji} <b>{level}</b>: {level_wins}W - {level_losses}L ({level_pct:.1f}%)
@@ -661,7 +666,7 @@ with tab2:
 # ----------------------------------------------------------------------------
 
 with tab3:
-    st.markdown('<div class="section-header">🔐 GLOCK ENTRY - Authorized Personnel Only</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-header">ðŸ” GLOCK ENTRY - Authorized Personnel Only</div>', unsafe_allow_html=True)
     
     if 'glock_authenticated' not in st.session_state:
         st.session_state['glock_authenticated'] = False
@@ -670,50 +675,50 @@ with tab3:
         st.markdown("""
         <div class="info-box" style="background-color: #ffcccc;">
             <center>
-            ⚠️ <b>RESTRICTED AREA</b> ⚠️<br>
+            âš ï¸ <b>RESTRICTED AREA</b> âš ï¸<br>
             <small>Enter password to continue</small>
             </center>
         </div>
         """, unsafe_allow_html=True)
         
         password = st.text_input("Enter the sacred password:", type="password")
-        if st.button("🔓 UNLOCK"):
+        if st.button("ðŸ”“ UNLOCK"):
             if password == GLOCK_PASSWORD:
                 st.session_state['glock_authenticated'] = True
                 st.rerun()
             else:
                 st.markdown("""
                 <div class="info-box" style="background-color: #ff0000; color: #ffffff;">
-                    <center>❌ ACCESS DENIED ❌<br>Nice try, freeloader!</center>
+                    <center>âŒ ACCESS DENIED âŒ<br>Nice try, freeloader!</center>
                 </div>
                 """, unsafe_allow_html=True)
     else:
         st.markdown("""
         <div class="info-box" style="background-color: #ccffcc;">
-            <center>✅ <b>ACCESS GRANTED</b> ✅<br>Welcome back, king! 👑</center>
+            <center>âœ… <b>ACCESS GRANTED</b> âœ…<br>Welcome back, king! ðŸ‘‘</center>
         </div>
         """, unsafe_allow_html=True)
         
         # New Lock Entry
-        st.markdown('<div class="section-header">➕ ADD NEW LOCK</div>', unsafe_allow_html=True)
+        st.markdown('<div class="section-header">âž• ADD NEW LOCK</div>', unsafe_allow_html=True)
         
         with st.form("lock_entry_form", clear_on_submit=True):
-            game = st.text_input("🏈 Game", placeholder="e.g., Eagles @ Cowboys")
+            game = st.text_input("ðŸˆ Game", placeholder="e.g., Eagles @ Cowboys")
             
             col1, col2 = st.columns(2)
             with col1:
-                bet_type = st.selectbox("📊 Bet Type", options=BET_TYPES)
+                bet_type = st.selectbox("ðŸ“Š Bet Type", options=BET_TYPES)
             with col2:
-                confidence = st.selectbox("💪 Confidence", options=CONFIDENCE_LEVELS)
+                confidence = st.selectbox("ðŸ’ª Confidence", options=CONFIDENCE_LEVELS)
             
-            pick = st.text_input("🎯 The Pick", placeholder="e.g., Eagles -6.5 or Over 45.5")
-            notes = st.text_area("📝 Notes (Optional)", placeholder="Any reasoning? Or just vibes?", max_chars=500)
+            pick = st.text_input("ðŸŽ¯ The Pick", placeholder="e.g., Eagles -6.5 or Over 45.5")
+            notes = st.text_area("ðŸ“ Notes (Optional)", placeholder="Any reasoning? Or just vibes?", max_chars=500)
             
-            submitted = st.form_submit_button("🔒 LOCK IT IN 🔒")
+            submitted = st.form_submit_button("ðŸ”’ LOCK IT IN ðŸ”’")
             
             if submitted:
                 if not game or not pick:
-                    st.error("⚠️ Game and Pick are required!")
+                    st.error("âš ï¸ Game and Pick are required!")
                 else:
                     lock_data = {
                         'game': game,
@@ -728,13 +733,13 @@ with tab3:
                     }
                     
                     if save_lock(conn, lock_data):
-                        st.success("🎉 LOCK SUBMITTED! 🎉")
+                        st.success("ðŸŽ‰ LOCK SUBMITTED! ðŸŽ‰")
                         st.balloons()
                     else:
-                        st.error("❌ Failed to save. Try again.")
+                        st.error("âŒ Failed to save. Try again.")
         
         # Settle Locks
-        st.markdown('<div class="section-header">⚖️ SETTLE LOCKS</div>', unsafe_allow_html=True)
+        st.markdown('<div class="section-header">âš–ï¸ SETTLE LOCKS</div>', unsafe_allow_html=True)
         
         active_for_settle = df[df['status'] == 'Active']
         
@@ -750,7 +755,7 @@ with tab3:
             selected_lock = st.selectbox("Select Lock", options=list(settle_options.keys()))
             result = st.radio("Result", options=['Win', 'Loss', 'Push'], horizontal=True)
             
-            if st.button("⚖️ SETTLE LOCK"):
+            if st.button("âš–ï¸ SETTLE LOCK"):
                 lock_id = settle_options[selected_lock]
                 idx = df[df['id'] == lock_id].index[0]
                 df.at[idx, 'result'] = result
@@ -758,12 +763,12 @@ with tab3:
                 df.at[idx, 'settled_at'] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
                 
                 if update_locks(conn, df):
-                    emoji = "🎉" if result == 'Win' else ("😢" if result == 'Loss' else "🤷")
+                    emoji = "ðŸŽ‰" if result == 'Win' else ("ðŸ˜¢" if result == 'Loss' else "ðŸ¤·")
                     st.success(f"{emoji} Lock settled as {result}!")
                     st.rerun()
         
         st.markdown("<br>", unsafe_allow_html=True)
-        if st.button("🔒 LOCK SCREEN"):
+        if st.button("ðŸ”’ LOCK SCREEN"):
             st.session_state['glock_authenticated'] = False
             st.rerun()
 
@@ -772,7 +777,7 @@ with tab3:
 # ----------------------------------------------------------------------------
 
 with tab4:
-    st.markdown('<div class="section-header">💰 DEGENERATE UNIT CONVERSIONS</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-header">ðŸ’° DEGENERATE UNIT CONVERSIONS</div>', unsafe_allow_html=True)
     
     st.markdown("""
     <div style="font-family: 'VT323', monospace; font-size: 1.2rem; margin: 15px 0; color: #000000;">
@@ -792,7 +797,7 @@ with tab4:
             st.markdown(f"""
             <div class="info-box">
                 <center>
-                <b>🏌️ ProV1s</b><br>
+                <b>ðŸŒï¸ ProV1s</b><br>
                 <span style="font-size: 1.8rem; color: #006600;">{conversions['prov1_balls']:.1f}</span><br>
                 <small style="color: #000000;">@ $4.75 each</small>
                 </center>
@@ -802,19 +807,9 @@ with tab4:
             st.markdown(f"""
             <div class="info-box">
                 <center>
-                <b>🫧 Zyn Cans</b><br>
+                <b>ðŸ«§ Zyn Cans</b><br>
                 <span style="font-size: 1.8rem; color: #660066;">{conversions['zyn_cans']:.1f}</span><br>
                 <small style="color: #000000;">@ $5 each</small>
-                </center>
-            </div>
-            """, unsafe_allow_html=True)
-            
-            st.markdown(f"""
-            <div class="info-box">
-                <center>
-                <b>💃 Philly's Lap Dances</b><br>
-                <span style="font-size: 1.8rem; color: #cc0066;">{conversions['philly_lap_dances']:.1f}</span><br>
-                <small style="color: #000000;">@ $25 each</small>
                 </center>
             </div>
             """, unsafe_allow_html=True)
@@ -823,7 +818,7 @@ with tab4:
             st.markdown(f"""
             <div class="info-box">
                 <center>
-                <b>🍺 Labatt Blues</b><br>
+                <b>ðŸº Labatt Blues</b><br>
                 <span style="font-size: 1.8rem; color: #000066;">{conversions['labatt_blues']:.1f}</span><br>
                 <small style="color: #000000;">@ $0.95 each</small>
                 </center>
@@ -833,7 +828,7 @@ with tab4:
             st.markdown(f"""
             <div class="info-box">
                 <center>
-                <b>🏌️ Scotty Camerons</b><br>
+                <b>ðŸŒï¸ Scotty Camerons</b><br>
                 <span style="font-size: 1.8rem; color: #004400;">{conversions['scotty_camerons']:.2f}</span><br>
                 <small style="color: #000000;">@ $450 each</small>
                 </center>
@@ -848,7 +843,7 @@ st.markdown('<div class="red-divider"></div>', unsafe_allow_html=True)
 
 st.markdown("""
 <div style="text-align: center; font-family: 'Comic Sans MS', cursive; font-size: 0.8rem; color: #000000; margin-top: 15px;">
-    <p>🔒 LockHub v2.0 🔒</p>
-    <p>© 2025 All Rights Reserved</p>
+    <p>ðŸ”’ LockHub v2.0 ðŸ”’</p>
+    <p>Â© 2025 All Rights Reserved</p>
 </div>
 """, unsafe_allow_html=True)
